@@ -1,3 +1,4 @@
+
 import ctypes
 
 # 라이브러리 로드
@@ -15,10 +16,7 @@ def make_param(str_list):
 
 # 테스트
 if __name__ == "__main__":
-    # Linux - feature_linux_sharedlib
-    argc_argv = ["yarpgen", "--std=c", "--seed=", "--mutate=all", "--mutation-seed=", "--allow-ub-in-dc=some", "-o", "out"]
+    # Windows - feature_windows
+    argc_argv = ["yarpgen", "--emit-pragmas=none", "--std=c++", "--seed=", "--mutate=all", "--mutation-seed=", "--allow-ub-in-dc=some", "-o", "out"]
     ret = yarpgen_function(*make_param(argc_argv))
     print(ret)
-
-
-
