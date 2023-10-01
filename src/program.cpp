@@ -68,7 +68,7 @@ void ProgramGenerator::emitCheckFunc(std::ostream &stream) {
     Options &options = Options::getInstance();
     if (options.getCheckAlgo() == CheckAlgo::ASSERTS) {
         stream << "static ";
-        stream << (options.isC() ? "_Bool" : "bool") << " value_mismatch = ";
+        stream << "bool" << " value_mismatch = ";
         stream << (options.isC() ? "0" : "false") << ";\n";
     }
 
@@ -103,6 +103,9 @@ static void emitArrayDecl(std::shared_ptr<EmitCtx> ctx, std::ostream &stream,
     for (auto &array : arrays) {
         if (!options.getAllowDeadData() && array->getIsDead())
             continue;
+        if (array->getAlignment() != 0)
+            stream << "__declspec(align(" << array->getAlignment()
+                   << ")) ";
         auto type = array->getType();
         assert(type->isArrayType() && "Array should have an Array type");
         auto array_type = std::static_pointer_cast<ArrayType>(type);
@@ -111,9 +114,6 @@ static void emitArrayDecl(std::shared_ptr<EmitCtx> ctx, std::ostream &stream,
         for (const auto &dimension : array_type->getDimensions()) {
             stream << "[" << dimension << "] ";
         }
-        if (array->getAlignment() != 0)
-            stream << "__attribute__((aligned(" << array->getAlignment()
-                   << ")))";
         stream << ";\n";
     }
 }
@@ -321,18 +321,6 @@ static void emitArrayExtDecl(std::shared_ptr<EmitCtx> ctx, std::ostream &stream,
             any_arrays_as_params = true;
             continue;
         }
-
-        auto type = array->getType();
-        assert(type->isArrayType() && "Array should have an Array type");
-        auto array_type = std::static_pointer_cast<ArrayType>(type);
-        stream << "extern ";
-        stream << array_type->getBaseType()->getName(ctx);
-        stream << " ";
-        stream << array->getName(ctx) << " ";
-        for (const auto &dimension : array_type->getDimensions()) {
-            stream << "[" << dimension << "] ";
-        }
-
         if (options.isCXX() &&
             options.getEmitAlignAttr() != OptionLevel::NONE) {
             bool emit_align_attr = true;
@@ -359,8 +347,20 @@ static void emitArrayExtDecl(std::shared_ptr<EmitCtx> ctx, std::ostream &stream,
                         ERROR("Bad alignment size");
                 }
                 array->setAlignment(alignment);
-                stream << "__attribute__((aligned(" << alignment << ")))";
+                stream << "__declspec(align(" << alignment << ")) ";
             }
+        auto type = array->getType();
+        assert(type->isArrayType() && "Array should have an Array type");
+        auto array_type = std::static_pointer_cast<ArrayType>(type);
+        stream << "extern ";
+        stream << array_type->getBaseType()->getName(ctx);
+        stream << " ";
+        stream << array->getName(ctx) << " ";
+        for (const auto &dimension : array_type->getDimensions()) {
+            stream << "[" << dimension << "] ";
+        }
+
+        
         }
 
         stream << ";\n";

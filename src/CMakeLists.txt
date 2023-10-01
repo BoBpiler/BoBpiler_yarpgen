@@ -70,9 +70,9 @@ add_custom_command(TARGET yarpgen
   POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:yarpgen> ${CMAKE_SOURCE_DIR}/scripts)
 
-install(TARGETS yarpgen LIBRARY DESTINATION lib
-      PUBLIC_HEADER DESTINATION include
-      )
+#install(TARGETS yarpgen LIBRARY DESTINATION lib
+#      PUBLIC_HEADER DESTINATION include
+#      )
 ## Test executables
 #add_executable(type_test type_test.cpp)
 #target_compile_features(type_test PRIVATE ${STD})
