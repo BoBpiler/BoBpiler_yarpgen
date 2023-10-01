@@ -2,7 +2,7 @@
 import ctypes
 
 # 라이브러리 로드
-yarpgen_function = ctypes.CDLL('./libyarpgen.so')
+yarpgen_function = ctypes.CDLL('.\yarpgen.dll')
 
 # 함수 프로토타입 정의
 yarpgen_function.gen_yarpgen.argtypes = (ctypes.c_int, ctypes.POINTER(ctypes.c_char_p))
@@ -17,6 +17,6 @@ def make_param(str_list):
 # 테스트
 if __name__ == "__main__":
     # Windows - feature_windows
-    argc_argv = ["yarpgen", "--emit-pragmas=none", "--std=c++", "--seed=", "--mutate=all", "--mutation-seed=", "--allow-ub-in-dc=some", "-o", "out"]
+    argc_argv = ["yarpgen", "--emit-pragmas=none", "--std=c++", "-o", "out"]
     ret = yarpgen_function(*make_param(argc_argv))
     print(ret)
