@@ -40,11 +40,11 @@ if(GIT_FOUND)
     )
 endif()
 
-if(MSVC)
-    set(BUILD_SHARED_LIBS true)
+#if(MSVC)
+#    set(BUILD_SHARED_LIBS true)
 
-    set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS true)
-endif()
+#    set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS true)
+#endif()
 
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 

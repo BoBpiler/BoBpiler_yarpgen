@@ -50,7 +50,7 @@ set(LIB_SRCS
 # Common std and build flags for all executables
 set(STD cxx_std_17)
 set(FLAGS #  $<$<CXX_COMPILER_ID:MSVC>:/WX>
-  $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>:-Wall -Wpedantic -Werror -fPIC>
+  $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>:-Wall -Wpedantic -Werror>
   -DBUILD_VERSION="${GIT_HASH}" -DBUILD_DATE="${BUILD_DATE}"
   -DYARPGEN_VERSION_MAJOR="${PROJECT_VERSION_MAJOR}" -DYARPGEN_VERSION_MINOR="${PROJECT_VERSION_MINOR}")
 
@@ -60,7 +60,8 @@ target_compile_features(yarpgen_lib PRIVATE ${STD})
 target_compile_options(yarpgen_lib PRIVATE ${FLAGS})
 
 # Main executable
-add_library(yarpgen SHARED yarpgen.cpp)
+add_executable(yarpgen yarpgen.cpp)
+#add_library(yarpgen SHARED yarpgen.cpp)
 target_compile_features(yarpgen PRIVATE ${STD})
 target_compile_options(yarpgen PRIVATE ${FLAGS})
 target_link_libraries(yarpgen yarpgen_lib)
