@@ -26,14 +26,15 @@ limitations under the License.
 #include <cstring>
 #include <fstream>
 #include <ostream>
-#include <nlohmann/json.hpp>
+// #include <nlohmann/json.hpp>
 #include <sys/types.h>
 #include <unistd.h>
 #include <sys/wait.h>
 #include <stdio.h>
+#include <sstream> 
 
 using namespace yarpgen;
-using json = nlohmann::json;
+// using json = nlohmann::json;
 
 static unsigned long g_seed = 0; // 글로벌 시드 변수
 static unsigned long g_mutation_seed = 0; // 글로벌 뮤테이션 시드 변수
@@ -148,13 +149,15 @@ int main(int argc, char *argv[]) {
             int l_status;
             waitpid(l_pid, &l_status, 0);
             
-            // Data to JSON Struct
-            json l_yarpgen_result;
-            l_yarpgen_result["generator"] = "yarpgen";
-            l_yarpgen_result["return_code"] = l_status;
-            std::string l_json_str = l_yarpgen_result.dump();
+            // // Data to JSON Struct
+            // json l_yarpgen_result;
+            // l_yarpgen_result["generator"] = "yarpgen";
+            // l_yarpgen_result["return_code"] = l_status;
+            // std::string l_json_str = l_yarpgen_result.dump();
 
-            std::cout << l_json_str << std::endl;
+            std::stringstream l_result;
+            l_result << "{ 'generator' : 'yarpgen', 'return_code' : '" << l_status << "' }";
+            std::cout << l_result.str() << std::endl;
             std::cout.flush();
         }
     }
